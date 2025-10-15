@@ -10,6 +10,10 @@ body {
     color: whitesmoke;
 }
 
+div {
+    text-align: center;
+}
+
 h1, p {
     text-align: center;
 }
