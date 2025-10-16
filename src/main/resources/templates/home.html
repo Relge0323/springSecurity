@@ -3,24 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Home Page</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-    <h1>Welcome, you found the Home Page!</h1>
+<header>
+    <h1>Mike's Spring Security Demo</h1>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:if="${!#authorization.expression('isAuthenticated()')}" th:href="@{/login}">Login</a>
+        <a th:if="${!#authorization.expression('isAuthenticated()')}" th:href="@{/register}">Register</a>
+        <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/private}">Private</a>
+    </nav>
+</header>
 
-    <div th:if="${#authorization.expression('isAuthenticated()')}">
-        <p>You are logged in as <strong th:text="${#authentication.name}"></strong></p>
-        <a th:href="@{/private}">Go to the Private Page</a><br>
+<main>
+    <div class="container">
 
-        <form th:action="@{/logout}" method="post" style="display:inline;">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-            <button type="submit">Logout</button>
-        </form>
+        <div th:if="${#authorization.expression('isAuthenticated()')}">
+            <p>You are logged in as <strong th:text="${#authentication.name}"></strong></p>
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+
+        <div th:if="${!#authorization.expression('isAuthenticated()')}">
+            <p><a th:href="@{/login}">Login</a> or <a th:href="@{/register}">Register</a> to access private content.</p>
+        </div>
     </div>
-
-    <div th:if="${!#authorization.expression('isAuthenticated()')}">
-        <a th:href="@{/login}">Login</a>
-        <a th:href="@{/register}">Register</a>
-    </div>
+</main>
 </body>
 </html>
